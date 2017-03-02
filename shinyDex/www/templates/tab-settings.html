@@ -4,6 +4,23 @@
       <ion-toggle  ng-model="settings.enableFriends">
         Enable Friends
       </ion-toggle>
+      <ion-item>
+        <button 
+          class="button button-block button-positive"
+          ng-click="changeLabel()"
+        >
+          {{changeButtonLabel}}
+        </button>
+      </ion-item>
+      <ion-item>
+        <button 
+          class="button button-block button-negative"
+          ng-click="takePicture()"
+        >
+          {{cameraButtonLabel}}
+        </button>
+      </ion-item>
+      <ion-item>{{label}}</ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
