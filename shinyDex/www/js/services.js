@@ -4,12 +4,14 @@ angular.module('starter.services', [])
   // Might use a resource here that returns a JSON array
 
   var pokemonCache = $cacheFactory('pokemonCache');
-  var baseUrl = 'http://pokeapi.co/api/v2/pokemon?limit=5&offset=257';
+  var baseUrl = 'http://pokeapi.co/api/v2/pokemon?offset=760';
   var pokemonList = [];
+  var newResults = [];
+  var testList = [];
   var pokemon = {};
 
-  expect($cacheFactory.get('cacheId')).toBe(pokemonCache);
-  expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
+  //expect($cacheFactory.get('cacheId')).toBe(pokemonCache);
+  //expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
 
   // Some fake testing data
   // var pokemonList = [{
@@ -47,53 +49,112 @@ angular.module('starter.services', [])
   //   pictogram: 'img/mike.png'
   // }];
 
-  function updatePokemonList() {
-    var newBase = baseUrl;
+  // function getPokemonList(pageUrl){
+  //
+  //   console.log('pageUrl');
+  //   if(pageUrl != null && pageUrl != undefined){
+  //
+  //     return $http.get(pageUrl).then(function(res){
+  //       angular.copy(res.data.results, newResults);
+  //       if(res.data.next != null){
+  //         pokemonList.concat(getPokemonList(res.data.next));
+  //       }
+  //       console.log(pokemonList);
+  //       console.log(pokemonList);
+  //       return newResults;
+  //     });
+  //
+  //   }
+  //   return null;
+  // }
 
-    //newBase = newBase.replace('<<search>>', query);
+  function getPokemonListFeed(pageUrl){
 
-    pokemonList.$promise = $http.get(newBase).then(function (res) {
-      angular.copy(res.data, pokemonList);
-      pokemonList.forEach(function(listPokemon){
-        pokemonCache.put('pokemonList/'+listPokemon.name, listPokemon)
+    if(pageUrl != null && pageUrl != undefined) {
+      return getPokemonList(pageUrl).then(function(res){
+        // testList[pageUrl] = res.results;
+        pageUrl = res.next;
+        pokemonList.push(res.results);
+        // console.log(testList)
+        getPokemonListFeed(pageUrl);
+          return pokemonList;
       });
-      return pokemonList;
-    });
-    return pokemonList.$promise;
-  };
-
-  function getPokemon(url) {
-
-      pokemon.promise = $http.get(url).then(function (res) {
-        pokemon = res.data;
-        pokemon.loaded = true;
-        return pokemon;
-      })
-      return pokemon.promise;
+    }
   }
 
-  return {
-    all: function() {
-      if(pokemonList.length < 1) {
-        return updatePokemonList();
-      }
-    },
-    remove: function(pokemon) {
-      pokemonList.splice(pokemonList.indexOf(pokemon), 1);
-    },
-    get: function(url) {
-      //console.log(pokemonList);
-
-      // for (var i = 0; i < pokemonList.length; i++) {
-      //   if (pokemonList[i].url === url) {
-          //if(pokemonList[i].loaded == true){
-            //return pokemonList[i]
-          //} else {
-            return getPokemon(url)
-          //}
-        //}
-      //}
-       //return null;
+  function getPokemonList(pageUrl){
+    if(pageUrl != null && pageUrl != undefined) {
+      return $http.get(pageUrl).then(function (res) {
+        angular.copy(res.data, newResults);
+        return newResults;
+      });
     }
+    return null;
+  }
+
+  // function updatePokemonList(nextUrl) {
+  //   console.log('more succes, sort of');
+  //   if(nextUrl != undefined) {
+  //     var newBase = nextUrl;
+  //
+  //     pokemonList.$promise = $http.get(newBase).then(function (res) {
+  //       //console.log(res);
+  //       this.pokemonList = res.data.results
+  //       if(res.data.next != null){
+  //         this.pokemonList.concat(updatePokemonList(res.data.next));
+  //       }
+  //       return this.pokemonList;
+  //     });
+  //     return pokemonList.$promise;
+  //   }
+  //   return null;
+  // };
+  //
+  // function getPokemonListFeed() {
+  //   console.log('loading more pokémon');
+  //   var newBase = baseUrl;
+  //
+  //   pokemonList.$promise = $http.get(newBase).then(function (res) {
+  //     console.log('actual succes, sort of');
+  //     angular.copy(res.data.results, pokemonList);
+  //     if(res.data.next != null){
+  //       pokemonList.concat(updatePokemonList(res.data.next).results);
+  //     }
+  //     console.log(pokemonList);
+  //     return pokemonList;
+  //   });
+  //   return pokemonList.$promise;
+  // };
+
+  // function getPokemon(url) {
+  //
+  //     pokemon.promise = $http.get(url).then(function (res) {
+  //       pokemon = res.data;
+  //       return pokemon;
+  //     })
+  //     return pokemon.promise;
+  // }
+
+  return {
+    getFeed: function(pageUrl) {
+      return getPokemonListFeed(pageUrl);
+    },
+    getNext: function(nextUrl) {
+      return updatePokemonList(nextUrl);
+    }
+    // get: function(url) {
+    //   //console.log(pokemonList);
+    //
+    //   // for (var i = 0; i < pokemonList.length; i++) {
+    //   //   if (pokemonList[i].url === url) {
+    //       //if(pokemonList[i].loaded == true){
+    //         //return pokemonList[i]
+    //       //} else {
+    //         return getPokemon(url)
+    //       //}
+    //     //}
+    //   //}
+    //    //return null;
+    // }
   };
 });

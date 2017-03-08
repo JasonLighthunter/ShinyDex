@@ -4,9 +4,18 @@ angular.module('starter.controllers', [])
 
   $scope.pokemonList = [];
 
-  Pokemon.all().then(
-    function(res){
-      $scope.pokemonList = res;
+
+  //$scope.pokemonList = Pokemon.getFeed('http://pokeapi.co/api/v2/pokemon?offset=760');
+  Pokemon.getFeed('http://pokeapi.co/api/v2/pokemon?offset=760').then(
+    function(res) {
+      console.log(res);
+      // res.forEach(function(resultList){
+      //   $scope.pokemon.concat(resultList);
+      // });
+      //
+//$scope.pokemonList = res.results;
+    }
+  );
       // res.results.forEach(function (resultPokemon) {
       //   console.log(resultPokemon);
       //   Pokemon.get(resultPokemon.url).then(function(result) {
@@ -16,12 +25,18 @@ angular.module('starter.controllers', [])
       //   });
       // });
       // console.log($scope.pokemonList);
-    }
-  );
+  //   }
+  // );
 
-  $scope.remove = function(pokemon) {
-    Pokemon.remove(pokemon);
-  };
+  // $scope.loadMore = function() {
+  //   Pokemon.getNext($scope.next).then(function(items){
+  //     console.log(items);
+  //     $scope.pokemonList = $scope.pokemonList.concat(items.results);
+  //
+  //     $scope.$broadcast('scroll.infiniteScrollComplete');
+  //     $scope.next = items.next;
+  //    });
+  // };
 })
 
 .controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {
