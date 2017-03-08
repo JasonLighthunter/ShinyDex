@@ -10,7 +10,7 @@ angular.module('starter.controllers', [])
 
 .controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {
   $scope.pokemon = Pokemon.get($stateParams.pokemonId);
-  $scope.test  = 'test';
+  $scope.test    = 'test';
 })
 
 .controller('SettingsCtrl', function($scope, $ionicPlatform, $cordovaCamera) {
@@ -18,33 +18,26 @@ angular.module('starter.controllers', [])
     enableFriends: true
   };
 
-  $scope.label = "Hello World!";
-  $scope.changeButtonLabel = "Change Label";
   $scope.cameraButtonLabel = 'take picture';
-
-  $scope.changeLabel = function() {
-    $scope.label = "Bye World";
-  };
+  $scope.imageSrc          = undefined;
 
   $scope.takePicture = function() {
-
     var options = {
-      quality: 50,
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: Camera.PictureSourceType.CAMERA,
-      allowEdit: true,
-      encodingType: Camera.EncodingType.JPEG,
-      targetWidth: 100,
-      targetHeight: 100,
-      popoverOptions: CameraPopoverOptions,
-      saveToPhotoAlbum: true,
-      correctOrientation: true
+      quality            : 50,
+      destinationType    : Camera.DestinationType.DATA_URL,
+      sourceType         : Camera.PictureSourceType.CAMERA,
+      allowEdit          : false,
+      encodingType       : Camera.EncodingType.JPEG,
+      targetWidth        : 300,
+      targetHeight       : 300,
+      popoverOptions     : CameraPopoverOptions,
+      saveToPhotoAlbum   : false,
+      correctOrientation : true
     };
 
     $cordovaCamera.getPicture(options).then(
       function(imageData) {
-        var image = document.getElementById('myImage');
-        image.src = "data:image/jpeg;base64," + imageData;
+        $scope.imageSrc = 'data:image/jpeg;base64,' + imageData;     
       }, 
       function(err) {
         console.log('Error Encountered');
