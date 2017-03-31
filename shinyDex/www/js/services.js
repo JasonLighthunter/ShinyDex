@@ -1,7 +1,9 @@
 angular.module('starter.services', [])
 
-.factory('Pokemon', function($http, $cacheFactory, $q) {
+.factory('Pokemon', function($http, $cacheFactory, $q, $window) {
   // Might use a resource here that returns a JSON array
+
+  $window.localStorage;
 
   var pokemonCache = $cacheFactory('pokemonCache');
   var baseUrl = 'http://pokeapi.co/api/v2/pokemon';
@@ -12,8 +14,8 @@ angular.module('starter.services', [])
   //expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
 
   function getPokemonListFromCache(currentNr){
-    var idList = pokemonCache.get('/pokemonList/metadata').idList;
-    var pokemonCount = pokemonCache.get('/pokemonList/metadata').pokemonCount;
+    var idList = JSON.parse(window.localStorage.getItem('pokemonList/metadata')).idList;
+    var pokemonCount = idList.length;
     var current = idList.indexOf(currentNr)+1;
 
     if(current < pokemonCount){
@@ -24,8 +26,8 @@ angular.module('starter.services', [])
       else{
         var listEnd = pokemonCount;
       }
-      for(var i = current; i<current+20; i++){
-        returnList = returnList.concat(pokemonCache.get('/pokemonList/'+idList[i]));
+      for(var i = current; i<listEnd; i++){
+        returnList = returnList.concat(JSON.parse(window.localStorage.getItem('pokemonList/'+idList[i])));
       }
       return returnList;
     }
@@ -38,6 +40,7 @@ angular.module('starter.services', [])
       return getPokemonListFromCache(lastPokemonId);
     }
     else{
+      console.log("promise");
       return getPokemonListFeed().then(function(res){
         return getPokemonListFromCache(lastPokemonId);
       })
@@ -45,18 +48,22 @@ angular.module('starter.services', [])
   }
 
   function canGetPokemonList(){
-    if(pokemonCache.get('pokemonList/DoA')) {
-      if (!pokemonCache.get('/pokemonList/DoA').filled) {
+    if(JSON.parse(window.localStorage.getItem('pokemonList/metadata'))) {
+      if (!JSON.parse(window.localStorage.getItem('pokemonList/metadata')).filled) {
+        console.log("false: bool empty");
         return false;
       }
       else {
-        if ((Date.now() - pokemonCache.get('/pokemonlist/DoA').lastAcces) / 86400000 >= 7) {
+        if ((Date.now() - JSON.parse(window.localStorage.getItem('pokemonList/metadata')).lastAcces) / 86400000 >= 7) {
+          console.log("false: date passed");
           return false;
         } else {
+          console.log("true: succes");
           return true;
         }
       }
     }
+    console.log("false: undefined");
     return false;
   }
 
@@ -73,25 +80,27 @@ angular.module('starter.services', [])
   function getPokemonListFeed(){
         return getPokemonListFeedRecursive(baseUrl + '?offset=760').then(function () {
           var idList = [];
-          var count = 0;
 
           for (var i = 0; i < pokemonList.length; i++) {
             pokemonList[i].nr = getPokemonNumber(pokemonList[i].url);
-            pokemonCache.put('/pokemonList/' + pokemonList[i].nr, {
+            $window.localStorage.setItem('pokemonList/'+pokemonList[i].nr, JSON.stringify({
               name: pokemonList[i].name,
               url: pokemonList[i].url,
               nr: pokemonList[i].nr
-            });
+            }));
             idList = idList.concat(angular.copy(pokemonList[i].nr));
-            count = i;
           }
 
-          pokemonCache.put('/pokemonList/metadata', {
+          console.log("1");
+          console.log(JSON.parse(window.localStorage.getItem('pokemonList/10040')));
+          console.log("2");
+
+          $window.localStorage.setItem('pokemonList/metadata', JSON.stringify(
+            {
             lastAcces: Date.now(),
             filled: true,
             idList: idList,
-            pokemonCount: count
-          });
+          }));
 
           return pokemonList;
         });
@@ -124,13 +133,16 @@ angular.module('starter.services', [])
       return getPokemonListFeed();
     },
     getPokemonList: function(lastPokemonId){
-      if(!lastPokemonId) lastPokemonId = 10040;
+      console.log(lastPokemonId);
+      if(!lastPokemonId || lastPokemonId<1) lastPokemonId = 10040;
+      console.log(lastPokemonId);
       var myPromise = getPokemonList(lastPokemonId);
       console.log(myPromise);
       return $q.when(
-        myPromise.then(function(res) {
+        myPromise).then(function(res) {
+          console.log(pokemonCache.info());
           return res;
-        }));
+        });
     },
     get: function(pokemonId) {
      for (var i = 0; i < pokemonList.length; i++) {

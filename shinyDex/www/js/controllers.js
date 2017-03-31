@@ -7,17 +7,22 @@ angular.module('starter.controllers', [])
 
 
   $scope.loadMore = function() {
-    $q.when(Pokemon.getPokemonList().then(function(res) {
+    if($scope.pokemonList.length > 0){
+      var number = $scope.pokemonList[$scope.pokemonList.length-1].nr;
+    }
+    $q.when(Pokemon.getPokemonList(number)).then(function(res) {
       if (res) {
+        console.log("")
         console.log(res);
         $scope.pokemonList = $scope.pokemonList.concat(res);
+        $scope.canLoadMore = true;
       }
       else{
         console.log("can't load any more data.");
         $scope.canLoadMore = false;
       }
       $scope.$broadcast('scroll.infiniteScrollComplete');
-    }));
+    });
   };
 
   $scope.$on('$stateChangeSuccess', function() {
