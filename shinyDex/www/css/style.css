@@ -1,1 +1,8 @@
 /* Empty. Add your own CSS if you like */
+.max-width-eq-parent {
+  max-width: 100%;
+}
+
+.align-children-center {
+  text-align: center;
+}

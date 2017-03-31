@@ -5,10 +5,35 @@
   The Friends service returns an array of friend data
 -->
 <ion-view view-title="{{pokemon.name}}">
-  <ion-content class="padding">
-    <img ng-src="{{pokemon.face}}" style="width: 64px; height: 64px">
-    <p>
-      {{pokemon.lastText}}
-    </p>
+  <ion-content>
+    <div class="row">
+      <div class="col col-50 align-children-center">
+        <img class="max-width-eq-parent" src="https://upload.wikimedia.org/wikipedia/en/2/28/Pokémon_Bulbasaur_art.png"/>
+      </div>
+      <div class="col col-50">nameTypeAndMarker</div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button class="button button-dark button-block">
+          Register
+          &nbsp   
+          <i class="icon ion-camera"></i>
+        </button>
+      </div>
+      <div class="col">
+        <button class="button button-dark button-block">
+          Brag
+          &nbsp
+          <i class="icon ion-share"></i>
+        </button>
+      </div>
+    </div>
+    <div class="list">
+      <div class="item item-divider">Evolution</div>
+      <div class="item">evolutiongraph</div>
+      <div class="item item-divider">Abilities</div>
+      <div class="item">overgrow</div>
+      <div class="item">chlorophyll</div>
+    </div>
   </ion-content>
 </ion-view>
