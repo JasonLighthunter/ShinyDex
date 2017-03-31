@@ -25,7 +25,7 @@ angular.module('starter.services', [])
     return getPokemonLists(baseUrl+'?offset=760').then(function(){
       console.log(pokemonCache.get('/pokemonList/10040'));
       for(var i = 0; i<pokemonList.length; i++){
-        pokemonList[i].nr = getPokemonNumber(pokemonList[i].url)
+        pokemonList[i].nr = getPokemonNumber(pokemonList[i].url);
         pokemonCache.put('/pokemonList/'+pokemonList[i].nr, {
           name: pokemonList[i].name,
           url: pokemonList[i].url,
@@ -42,13 +42,13 @@ angular.module('starter.services', [])
       .then(function(response){
         if(response.data) {
           pokemonList = pokemonList.concat(angular.copy(response.data.results));
-          if (response.data.next != null) {
+          if (response.data.next !== null) {
             console.log(response.data.next);
             return getPokemonLists(response.data.next);
           }
         }
       });
-  };
+  }
 
   function getPokemonNumber(pokemonUrl){
     var urlString = angular.copy(pokemonUrl);
@@ -62,6 +62,14 @@ angular.module('starter.services', [])
   return {
     getFeed: function() {
       return getPokemonList();
-    }
+    },
+    get: function(pokemonId) {
+     for (var i = 0; i < pokemonList.length; i++) {
+       if (pokemonList[i].id === parseInt(pokemonId)) {
+         return pokemonList[i];
+       }
+     }
+     return null;
+   }
   };
 });
