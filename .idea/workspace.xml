@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8cf02b47-d9f2-4907-ad02-2f9a666d8f54" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shinyDex/www/js/controllers.js" afterPath="$PROJECT_DIR$/shinyDex/www/js/controllers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shinyDex/www/js/services.js" afterPath="$PROJECT_DIR$/shinyDex/www/js/services.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shinyDex/www/templates/tab-pokemon.html" afterPath="$PROJECT_DIR$/shinyDex/www/templates/tab-pokemon.html" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,8 +25,18 @@
       <file leaf-file-name="controllers.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/shinyDex/www/js/controllers.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+            <state relative-caret-position="442">
+              <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="5" selection-end-line="31" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tab-pokemon.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/shinyDex/www/templates/tab-pokemon.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="7" lean-forward="true" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -63,9 +75,12 @@
       <file leaf-file-name="services.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/shinyDex/www/js/services.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="323">
+              <caret line="80" column="32" lean-forward="false" selection-start-line="80" selection-start-column="32" selection-end-line="80" selection-end-column="32" />
+              <folding>
+                <element signature="e#1750#2208#0" expanded="false" />
+                <element signature="e#3098#3463#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -80,8 +95,9 @@
       <list>
         <option value="$PROJECT_DIR$/shinyDex/.gitignore" />
         <option value="$PROJECT_DIR$/shinyDex/ionic.config.json" />
-        <option value="$PROJECT_DIR$/shinyDex/www/js/controllers.js" />
         <option value="$PROJECT_DIR$/shinyDex/package.json" />
+        <option value="$PROJECT_DIR$/shinyDex/www/templates/tab-pokemon.html" />
+        <option value="$PROJECT_DIR$/shinyDex/www/js/controllers.js" />
         <option value="$PROJECT_DIR$/shinyDex/www/js/services.js" />
       </list>
     </option>
@@ -296,12 +312,12 @@
       <workItem from="1490351213720" duration="613000" />
       <workItem from="1490360187982" duration="1254000" />
       <workItem from="1490947980203" duration="1502000" />
-      <workItem from="1490950727113" duration="366000" />
+      <workItem from="1490950727113" duration="6374000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28642000" />
+    <option name="totallyTimeSpent" value="34650000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
@@ -372,7 +388,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -412,7 +431,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -452,7 +474,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -492,7 +517,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -524,7 +552,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -556,7 +587,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -588,7 +622,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -617,19 +654,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/shinyDex/www/templates/tab-pokemon.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="7" lean-forward="true" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/shinyDex/www/js/controllers.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="18" column="5" lean-forward="false" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
+        <state relative-caret-position="442">
+          <caret line="26" column="2" lean-forward="false" selection-start-line="26" selection-start-column="5" selection-end-line="31" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/shinyDex/www/js/services.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="323">
+          <caret line="80" column="32" lean-forward="false" selection-start-line="80" selection-start-column="32" selection-end-line="80" selection-end-column="32" />
+          <folding>
+            <element signature="e#1750#2208#0" expanded="false" />
+            <element signature="e#3098#3463#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
