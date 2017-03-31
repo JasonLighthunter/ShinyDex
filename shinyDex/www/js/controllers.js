@@ -15,8 +15,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {
-  $scope.pokemon = Pokemon.get($stateParams.pokemonId);
-  $scope.test    = 'test';
+  console.log($stateParams.pokemonId);
+  Pokemon.get($stateParams.pokemonId)
+    .then(function(res) {
+      $scope.pokemon = res;
+    });
 })
 
 .controller('SettingsCtrl', function($scope, $ionicPlatform, $cordovaCamera) {
