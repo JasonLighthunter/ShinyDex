@@ -4,157 +4,64 @@ angular.module('starter.services', [])
   // Might use a resource here that returns a JSON array
 
   var pokemonCache = $cacheFactory('pokemonCache');
-  var baseUrl = 'http://pokeapi.co/api/v2/pokemon?offset=760';
+  var baseUrl = 'http://pokeapi.co/api/v2/pokemon';
   var pokemonList = [];
-  var newResults = [];
-  var testList = [];
   var pokemon = {};
 
   //expect($cacheFactory.get('cacheId')).toBe(pokemonCache);
   //expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
 
-  // Some fake testing data
-  // var pokemonList = [{
-  //   Nr: 1,
-  //   name: 'Bulbasaur',
-  //   typeOne: { name: "grass"},
-  //   typeTwo: { name: "poison"},
-  //   caughtImage: 'img/gsball.png',
-  //   pictogram: 'img/ben.png'
-  // }, {
-  //   Nr: 2,
-  //   name: 'Ivysaur',
-  //   typeOne: { name: "grass"},
-  //   typeTwo: { name: "poison"},
-  //   caughtImage: 'img/pokeball.png',
-  //   pictogram: 'img/max.png'
-  // }, {
-  //   Nr: 3,
-  //   name: 'Venosaur',
-  //   typeOne: { name: "grass"},
-  //   typeTwo: { name: "poison"},
-  //   caughtImage: 'img/pokeball.png',
-  //   pictogram: 'img/adam.jpg'
-  // }, {
-  //   Nr: 4,
-  //   name: 'Charmander',
-  //   typeOne: { name: "fire"},
-  //   caughtImage: 'img/pokeball.png',
-  //   pictogram: 'img/perry.png'
-  // }, {
-  //   Nr: 5,
-  //   name: 'Charmeleon',
-  //   typeOne: { name: "fire"},
-  //   caughtImage: 'img/gsball.png',
-  //   pictogram: 'img/mike.png'
-  // }];
+  /*
+  pokemonList.push() wordt gebruikt om de data aan de lijst toe te voegen
 
-  // function getPokemonList(pageUrl){
-  //
-  //   console.log('pageUrl');
-  //   if(pageUrl != null && pageUrl != undefined){
-  //
-  //     return $http.get(pageUrl).then(function(res){
-  //       angular.copy(res.data.results, newResults);
-  //       if(res.data.next != null){
-  //         pokemonList.concat(getPokemonList(res.data.next));
-  //       }
-  //       console.log(pokemonList);
-  //       console.log(pokemonList);
-  //       return newResults;
-  //     });
-  //
-  //   }
-  //   return null;
-  // }
+  angular.copy(foo) wordt gebruikt om een deep copy te maken van de resultaten van de http.get
 
-  function getPokemonListFeed(pageUrl){
+  als er geen deep copy wordt gemaakt van de resultaten zullen de resultaten binnen de PokemonList na elke request
+  worden aangepast, waardoor er een lijst ontstaat van gelijke objecten.
 
-    if(pageUrl != null && pageUrl != undefined) {
-      return getPokemonList(pageUrl).then(function(res){
-        // testList[pageUrl] = res.results;
-        pageUrl = res.next;
-        pokemonList.push(res.results);
-        // console.log(testList)
-        getPokemonListFeed(pageUrl);
-          return pokemonList;
-      });
-    }
+  verder werkt deze query recursief waardoor in een keer de gehele lijst wordt ingeladen.
+   */
+  function getPokemonList(){
+    return getPokemonLists(baseUrl+'?offset=760').then(function(){
+      console.log(pokemonCache.get('/pokemonList/10040'));
+      for(var i = 0; i<pokemonList.length; i++){
+        pokemonList[i].nr = getPokemonNumber(pokemonList[i].url)
+        pokemonCache.put('/pokemonList/'+pokemonList[i].nr, {
+          name: pokemonList[i].name,
+          url: pokemonList[i].url,
+          nr: pokemonList[i].nr
+        });
+      }
+      console.log(pokemonCache.get('/pokemonList/10040'));
+      return pokemonList;
+    });
   }
 
-  function getPokemonList(pageUrl){
-    if(pageUrl != null && pageUrl != undefined) {
-      return $http.get(pageUrl).then(function (res) {
-        angular.copy(res.data, newResults);
-        return newResults;
+  function getPokemonLists (apiURL){
+    return $http.get(apiURL)
+      .then(function(response){
+        if(response.data) {
+          pokemonList = pokemonList.concat(angular.copy(response.data.results));
+          if (response.data.next != null) {
+            console.log(response.data.next);
+            return getPokemonLists(response.data.next);
+          }
+        }
       });
+  };
+
+  function getPokemonNumber(pokemonUrl){
+    var urlString = angular.copy(pokemonUrl);
+    if(urlString.lastIndexOf("/") == urlString.length-1) {
+      urlString = urlString.substr(0, urlString.lastIndexOf("/"));
     }
-    return null;
+    urlString = urlString.substr(urlString.lastIndexOf("/") + 1);
+    return(urlString);
   }
-
-  // function updatePokemonList(nextUrl) {
-  //   console.log('more succes, sort of');
-  //   if(nextUrl != undefined) {
-  //     var newBase = nextUrl;
-  //
-  //     pokemonList.$promise = $http.get(newBase).then(function (res) {
-  //       //console.log(res);
-  //       this.pokemonList = res.data.results
-  //       if(res.data.next != null){
-  //         this.pokemonList.concat(updatePokemonList(res.data.next));
-  //       }
-  //       return this.pokemonList;
-  //     });
-  //     return pokemonList.$promise;
-  //   }
-  //   return null;
-  // };
-  //
-  // function getPokemonListFeed() {
-  //   console.log('loading more pokémon');
-  //   var newBase = baseUrl;
-  //
-  //   pokemonList.$promise = $http.get(newBase).then(function (res) {
-  //     console.log('actual succes, sort of');
-  //     angular.copy(res.data.results, pokemonList);
-  //     if(res.data.next != null){
-  //       pokemonList.concat(updatePokemonList(res.data.next).results);
-  //     }
-  //     console.log(pokemonList);
-  //     return pokemonList;
-  //   });
-  //   return pokemonList.$promise;
-  // };
-
-  // function getPokemon(url) {
-  //
-  //     pokemon.promise = $http.get(url).then(function (res) {
-  //       pokemon = res.data;
-  //       return pokemon;
-  //     })
-  //     return pokemon.promise;
-  // }
 
   return {
-    getFeed: function(pageUrl) {
-      return getPokemonListFeed(pageUrl);
-    },
-    getNext: function(nextUrl) {
-      return updatePokemonList(nextUrl);
+    getFeed: function() {
+      return getPokemonList();
     }
-    // get: function(url) {
-    //   //console.log(pokemonList);
-    //
-    //   // for (var i = 0; i < pokemonList.length; i++) {
-    //   //   if (pokemonList[i].url === url) {
-    //       //if(pokemonList[i].loaded == true){
-    //         //return pokemonList[i]
-    //       //} else {
-    //         return getPokemon(url)
-    //       //}
-    //     //}
-    //   //}
-    //    //return null;
-    // }
   };
 });
