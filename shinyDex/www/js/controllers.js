@@ -20,6 +20,10 @@ angular.module('starter.controllers', [])
     .then(function(res) {
       $scope.pokemon = res;
     });
+
+  $scope.doBrag = function() {
+    window.open('http://www.reddit.com/r/shinypokemon', '_system', 'location=yes');
+  };
 })
 
 .controller('SettingsCtrl', function($scope, $ionicPlatform, $cordovaCamera) {
