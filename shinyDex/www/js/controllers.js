@@ -1,11 +1,17 @@
 angular.module('starter.controllers', [])
 
 .controller('PokemonCtrl', function($scope, Pokemon) {
-  $scope.pokemonList = Pokemon.all();
 
-  $scope.remove = function(pokemon) {
-    Pokemon.remove(pokemon);
-  };
+  $scope.pokemonList = [];
+
+
+  //$scope.pokemonList = Pokemon.getFeed('http://pokeapi.co/api/v2/pokemon?offset=760');
+  Pokemon.getFeed().then(
+    function(res) {
+      console.log(res);
+      $scope.pokemonList = res;
+    }
+  );
 })
 
 .controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {

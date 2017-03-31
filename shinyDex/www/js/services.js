@@ -1,50 +1,75 @@
 angular.module('starter.services', [])
 
-.factory('Pokemon', function() {
+.factory('Pokemon', function($http, $cacheFactory) {
   // Might use a resource here that returns a JSON array
 
-  // Some fake testing data
-  var pokemonList = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
-    id: 1,
-    name: 'Max Lynx',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    name: 'Adam Bradleyson',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    name: 'Perry Governor',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }, {
-    id: 4,
-    name: 'Mike Harrington',
-    lastText: 'This is wicked good ice cream.',
-    face: 'img/mike.png'
-  }];
+  var pokemonCache = $cacheFactory('pokemonCache');
+  var baseUrl = 'http://pokeapi.co/api/v2/pokemon';
+  var pokemonList = [];
+  var pokemon = {};
+
+  //expect($cacheFactory.get('cacheId')).toBe(pokemonCache);
+  //expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
+
+  /*
+  pokemonList.push() wordt gebruikt om de data aan de lijst toe te voegen
+
+  angular.copy(foo) wordt gebruikt om een deep copy te maken van de resultaten van de http.get
+
+  als er geen deep copy wordt gemaakt van de resultaten zullen de resultaten binnen de PokemonList na elke request
+  worden aangepast, waardoor er een lijst ontstaat van gelijke objecten.
+
+  verder werkt deze query recursief waardoor in een keer de gehele lijst wordt ingeladen.
+   */
+  function getPokemonList(){
+    return getPokemonLists(baseUrl+'?offset=760').then(function(){
+      console.log(pokemonCache.get('/pokemonList/10040'));
+      for(var i = 0; i<pokemonList.length; i++){
+        pokemonList[i].nr = getPokemonNumber(pokemonList[i].url);
+        pokemonCache.put('/pokemonList/'+pokemonList[i].nr, {
+          name: pokemonList[i].name,
+          url: pokemonList[i].url,
+          nr: pokemonList[i].nr
+        });
+      }
+      console.log(pokemonCache.get('/pokemonList/10040'));
+      return pokemonList;
+    });
+  }
+
+  function getPokemonLists (apiURL){
+    return $http.get(apiURL)
+      .then(function(response){
+        if(response.data) {
+          pokemonList = pokemonList.concat(angular.copy(response.data.results));
+          if (response.data.next !== null) {
+            console.log(response.data.next);
+            return getPokemonLists(response.data.next);
+          }
+        }
+      });
+  }
+
+  function getPokemonNumber(pokemonUrl){
+    var urlString = angular.copy(pokemonUrl);
+    if(urlString.lastIndexOf("/") == urlString.length-1) {
+      urlString = urlString.substr(0, urlString.lastIndexOf("/"));
+    }
+    urlString = urlString.substr(urlString.lastIndexOf("/") + 1);
+    return(urlString);
+  }
 
   return {
-    all: function() {
-      return pokemonList;
-    },
-    remove: function(pokemon) {
-      pokemonList.splice(pokemonList.indexOf(pokemon), 1);
+    getFeed: function() {
+      return getPokemonList();
     },
     get: function(pokemonId) {
-      for (var i = 0; i < pokemonList.length; i++) {
-        if (pokemonList[i].id === parseInt(pokemonId)) {
-          return pokemonList[i];
-        }
-      }
-      return null;
-    }
+     for (var i = 0; i < pokemonList.length; i++) {
+       if (pokemonList[i].id === parseInt(pokemonId)) {
+         return pokemonList[i];
+       }
+     }
+     return null;
+   }
   };
 });
