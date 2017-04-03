@@ -145,6 +145,25 @@ angular.module('starter.services', [])
   };
 })
 
+.factory('CameraFactory', function($cordovaCamera) {
+  var opt = {
+      quality            : 50,
+      destinationType    : Camera.DestinationType.DATA_URL,
+      sourceType         : Camera.PictureSourceType.CAMERA,
+      allowEdit          : false,
+      encodingType       : Camera.EncodingType.JPEG,
+      targetWidth        : 300,
+      targetHeight       : 300,
+      popoverOptions     : CameraPopoverOptions,
+      saveToPhotoAlbum   : false,
+      correctOrientation : true
+    };
+
+  return {
+    options : opt
+  };
+})
+
 .factory('ShareFactory', function($cordovaSocialSharing) {
   return {
     shareViaWhatsApp: function(pokemonName) {
@@ -160,4 +179,6 @@ angular.module('starter.services', [])
       });
     }
   };
-});
+})
+
+;
