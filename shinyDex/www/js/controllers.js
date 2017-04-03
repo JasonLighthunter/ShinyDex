@@ -171,21 +171,8 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
-
-  $scope.cameraButtonLabel = 'take picture';
-  $scope.imageSrc = undefined;
-
-  $scope.takePicture = function() {
-    var options = CameraFactory.options;
-
-    $cordovaCamera.getPicture(options).then(
-      function(imageData) {
-        $scope.imageSrc = 'data:image/jpeg;base64,' + imageData;
-      },
-      function(err) {
-        console.log('Error Encountered');
-      }
-    );
+  $scope.removeProof = function() {
+    localStorage
   };
 });
 
