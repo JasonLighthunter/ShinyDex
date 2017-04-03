@@ -75,7 +75,7 @@ angular.module('starter.services', [])
   verder werkt deze query recursief waardoor in een keer de gehele lijst wordt ingeladen.
    */
   function getPokemonListFeed(){
-        return getPokemonListFeedRecursive(baseUrl).then(function () {
+        return getPokemonListFeedRecursive(baseUrl + '?offset=760').then(function () {
           var idList = [];
 
           for (var i = 0; i < pokemonList.length; i++) {
