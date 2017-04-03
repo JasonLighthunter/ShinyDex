@@ -162,7 +162,7 @@ angular.module('starter.services', [])
   return {
     options : opt
   };
-});
+})
 
 .factory('ShareFactory', function($cordovaSocialSharing) {
   return {
@@ -179,4 +179,6 @@ angular.module('starter.services', [])
       });
     }
   };
-});
+})
+
+;
