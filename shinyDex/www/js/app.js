@@ -47,7 +47,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
       }
     }
   })
-  
+
   .state('tab.pokemon-detail', {
     url: '/pokemon/:pokemonId',
     views: {
