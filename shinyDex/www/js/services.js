@@ -1,19 +1,16 @@
 angular.module('starter.services', [])
 
-.factory('Pokemon', function($http, $cacheFactory, $q, $window) {
+.factory('Pokemon', function($http, $q, $window) {
   // Might use a resource here that returns a JSON array
 
   $window.localStorage;
 
-  var pokemonCache = $cacheFactory('pokemonCache');
   var baseUrl = 'http://pokeapi.co/api/v2/pokemon';
   var pokemonList = [];
   var pokemon = {};
 
-  //expect($cacheFactory.get('cacheId')).toBe(pokemonCache);
-  //expect($cacheFactory.get('noSuchCacheId')).not.toBeDefined();
 
-  function getPokemonListFromCache(currentNr){
+  function getPokemonListFromLocalStorage(currentNr){
     var idList = JSON.parse(window.localStorage.getItem('pokemonList/metadata')).idList;
     var pokemonCount = idList.length;
     var current = idList.indexOf(currentNr)+1;
@@ -37,12 +34,12 @@ angular.module('starter.services', [])
   function getPokemonList(lastPokemonId) {
     if (canGetPokemonList()){
       console.log("no promise");
-      return getPokemonListFromCache(lastPokemonId);
+      return getPokemonListFromLocalStorage(lastPokemonId);
     }
     else{
       console.log("promise");
       return getPokemonListFeed().then(function(res){
-        return getPokemonListFromCache(lastPokemonId);
+        return getPokemonListFromLocalStorage(lastPokemonId);
       })
     }
   }
@@ -78,7 +75,7 @@ angular.module('starter.services', [])
   verder werkt deze query recursief waardoor in een keer de gehele lijst wordt ingeladen.
    */
   function getPokemonListFeed(){
-        return getPokemonListFeedRecursive(baseUrl + '?offset=760').then(function () {
+        return getPokemonListFeedRecursive(baseUrl).then(function () {
           var idList = [];
 
           for (var i = 0; i < pokemonList.length; i++) {
@@ -90,10 +87,6 @@ angular.module('starter.services', [])
             }));
             idList = idList.concat(angular.copy(pokemonList[i].nr));
           }
-
-          console.log("1");
-          console.log(JSON.parse(window.localStorage.getItem('pokemonList/10040')));
-          console.log("2");
 
           $window.localStorage.setItem('pokemonList/metadata', JSON.stringify(
             {
@@ -143,14 +136,10 @@ angular.module('starter.services', [])
       return getPokemonListFeed();
     },
     getPokemonList: function(lastPokemonId){
-      console.log(lastPokemonId);
-      if(!lastPokemonId || lastPokemonId<1) lastPokemonId = 10040;
-      console.log(lastPokemonId);
+      if(!lastPokemonId || lastPokemonId<1) lastPokemonId = 1;
       var myPromise = getPokemonList(lastPokemonId);
-      console.log(myPromise);
       return $q.when(
         myPromise).then(function(res) {
-          console.log(pokemonCache.info());
           return res;
         });
     },

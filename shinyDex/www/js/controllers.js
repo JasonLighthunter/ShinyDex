@@ -12,8 +12,6 @@ angular.module('starter.controllers', [])
     }
     $q.when(Pokemon.getPokemonList(number)).then(function(res) {
       if (res) {
-        console.log("")
-        console.log(res);
         $scope.pokemonList = $scope.pokemonList.concat(res);
         $scope.canLoadMore = true;
       }
