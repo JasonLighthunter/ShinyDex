@@ -181,4 +181,15 @@ angular.module('starter.services', [])
   };
 })
 
+.factory('ShakeFactory', function($cordovaDeviceMotion) {
+  var opts = {
+    frequency: 100, // Measure every 100ms
+    deviation : 25  // We'll use deviation to determine the shake event, best values in the range between 25 and 30
+  };
+
+  return {
+    options : opts
+
+  };
+})
 ;

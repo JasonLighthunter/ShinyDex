@@ -46,10 +46,7 @@ angular.module('starter.controllers', [])
   $scope.testLabel = 0;
 
   // watch Acceleration options
-  $scope.options = {
-    frequency: 100, // Measure every 100ms
-    deviation : 25  // We'll use deviation to determine the shake event, best values in the range between 25 and 30
-  };
+  $scope.options = ShakeFactory.options;
 
   // Current measurements
   $scope.measurements = {
@@ -57,7 +54,7 @@ angular.module('starter.controllers', [])
     y : null,
     z : null,
     timestamp : null
-  }
+  };
 
   // Previous measurements
   $scope.previousMeasurements = {
@@ -65,7 +62,7 @@ angular.module('starter.controllers', [])
     y : null,
     z : null,
     timestamp : null
-  }
+  };
 
   // Watcher object
   $scope.watch = null;
@@ -100,7 +97,7 @@ angular.module('starter.controllers', [])
     // Stop watching method
     $scope.stopWatching = function() {
       $scope.watch.clearWatch();
-    }
+    };
 
     // Detect shake method
     $scope.detectShake = function(result) {
@@ -129,7 +126,7 @@ angular.module('starter.controllers', [])
           x: null,
           y: null,
           z: null
-        }
+        };
 
       } else {
         // On first measurements set it as the previous one
@@ -137,17 +134,17 @@ angular.module('starter.controllers', [])
           x: result.x,
           y: result.y,
           z: result.z
-        }
+        };
       }
 
-    }
+    };
 
   });
 
   $scope.$on('$ionicView.afterEnter', function(){
     $scope.testLabel = 0;
     $scope.startWatching();
-  })
+  });
 
   $scope.$on('$ionicView.beforeLeave', function(){
     $scope.watch.clearWatch(); // Turn off motion detection watcher
