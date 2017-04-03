@@ -40,7 +40,7 @@ angular.module('starter.services', [])
       console.log("promise");
       return getPokemonListFeed().then(function(res){
         return getPokemonListFromLocalStorage(lastPokemonId);
-      })
+      });
     }
   }
 
@@ -143,5 +143,24 @@ angular.module('starter.services', [])
     get: function(pokemonId) {
       return getPokemon(pokemonId);
    }
+  };
+})
+
+.factory('CameraFactory', function($cordovaCamera) {
+  var opt = {
+      quality            : 50,
+      destinationType    : Camera.DestinationType.DATA_URL,
+      sourceType         : Camera.PictureSourceType.CAMERA,
+      allowEdit          : false,
+      encodingType       : Camera.EncodingType.JPEG,
+      targetWidth        : 300,
+      targetHeight       : 300,
+      popoverOptions     : CameraPopoverOptions,
+      saveToPhotoAlbum   : false,
+      correctOrientation : true
+    };
+
+  return {
+    options : opt
   };
 });

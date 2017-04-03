@@ -44,27 +44,16 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('SettingsCtrl', function($scope, $ionicPlatform, $cordovaCamera) {
+.controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
   $scope.settings = {
     enableFriends: true
   };
 
   $scope.cameraButtonLabel = 'take picture';
-  $scope.imageSrc          = undefined;
+  $scope.imageSrc = undefined;
 
   $scope.takePicture = function() {
-    var options = {
-      quality            : 50,
-      destinationType    : Camera.DestinationType.DATA_URL,
-      sourceType         : Camera.PictureSourceType.CAMERA,
-      allowEdit          : false,
-      encodingType       : Camera.EncodingType.JPEG,
-      targetWidth        : 300,
-      targetHeight       : 300,
-      popoverOptions     : CameraPopoverOptions,
-      saveToPhotoAlbum   : false,
-      correctOrientation : true
-    };
+    var options = CameraFactory.options;
 
     $cordovaCamera.getPicture(options).then(
       function(imageData) {
@@ -76,3 +65,4 @@ angular.module('starter.controllers', [])
     );
   };
 });
+
