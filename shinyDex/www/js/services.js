@@ -19,10 +19,10 @@ angular.module('starter.services', [])
       var returnList = [];
       if(current+20 < pokemonCount){
         var listEnd = current+20;
-      }
-      else{
+      } else{
         var listEnd = pokemonCount;
       }
+
       for(var i = current; i<listEnd; i++){
         returnList = returnList.concat(JSON.parse(window.localStorage.getItem('pokemonList/'+idList[i])));
       }
@@ -35,12 +35,11 @@ angular.module('starter.services', [])
     if (canGetPokemonList()){
       console.log("no promise");
       return getPokemonListFromLocalStorage(lastPokemonId);
-    }
-    else{
+    } else {
       console.log("promise");
       return getPokemonListFeed().then(function(res){
         return getPokemonListFromLocalStorage(lastPokemonId);
-      })
+      });
     }
   }
 
@@ -144,4 +143,42 @@ angular.module('starter.services', [])
       return getPokemon(pokemonId);
    }
   };
-});
+})
+
+.factory('CameraFactory', function($cordovaCamera) {
+  var opt = {
+      quality            : 50,
+      destinationType    : Camera.DestinationType.DATA_URL,
+      sourceType         : Camera.PictureSourceType.CAMERA,
+      allowEdit          : false,
+      encodingType       : Camera.EncodingType.JPEG,
+      targetWidth        : 300,
+      targetHeight       : 300,
+      popoverOptions     : CameraPopoverOptions,
+      saveToPhotoAlbum   : false,
+      correctOrientation : true
+    };
+
+  return {
+    options : opt
+  };
+})
+
+.factory('ShareFactory', function($cordovaSocialSharing) {
+  return {
+    shareViaWhatsApp: function(pokemonName) {
+      var message = "I caught a " + pokemonName;
+      console.log("test");
+
+      $cordovaSocialSharing
+      .shareViaWhatsApp(message)
+      .then(function(result) {
+        console.log("shared");
+      }, function(err) {
+        console.log(err);
+      });
+    }
+  };
+})
+
+;

@@ -32,16 +32,14 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {
-  console.log($stateParams.pokemonId);
+.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory /*$cordovaSocialSharing*/) {
   Pokemon.get($stateParams.pokemonId)
     .then(function(res) {
       $scope.pokemon = res;
+      $scope.doBrag  = function() {
+        ShareFactory.shareViaWhatsApp(res.name);
+      };
     });
-
-  $scope.doBrag = function() {
-    window.open('http://www.reddit.com/r/shinypokemon', '_system', 'location=yes');
-  };
 })
 
 .controller('testCtrl', function($scope, $ionicPlatform, $cordovaDeviceMotion){
@@ -156,27 +154,13 @@ angular.module('starter.controllers', [])
   });
 })
 
-.controller('SettingsCtrl', function($scope, $ionicPlatform, $cordovaCamera) {
-  $scope.settings = {
-    enableFriends: true
-  };
+.controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
 
   $scope.cameraButtonLabel = 'take picture';
-  $scope.imageSrc          = undefined;
+  $scope.imageSrc = undefined;
 
   $scope.takePicture = function() {
-    var options = {
-      quality            : 50,
-      destinationType    : Camera.DestinationType.DATA_URL,
-      sourceType         : Camera.PictureSourceType.CAMERA,
-      allowEdit          : false,
-      encodingType       : Camera.EncodingType.JPEG,
-      targetWidth        : 300,
-      targetHeight       : 300,
-      popoverOptions     : CameraPopoverOptions,
-      saveToPhotoAlbum   : false,
-      correctOrientation : true
-    };
+    var options = CameraFactory.options;
 
     $cordovaCamera.getPicture(options).then(
       function(imageData) {
@@ -188,3 +172,4 @@ angular.module('starter.controllers', [])
     );
   };
 });
+
