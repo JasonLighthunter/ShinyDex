@@ -5,20 +5,11 @@
         class="item-remove-animate item-avatar item-icon-right"
         ng-repeat="pokemon in pokemonList"
         type="item-text-wrap"
-        href="#/tab/pokemon/{{pokemon.name}}"
+        ng-click="goto('/pokemon/{{pokemon.name}}')"
       >
-        <!--<img ng-src="{{pokemon.pictogram}}">-->
-        <!--&lt;!&ndash;right&ndash;&gt;<span class="item-note">#{{pokemon.id}}</span>-->
         <h2>{{pokemon.name}}</h2>
-        <!--<p>{{pokemon.types[0].type.name}}</p>-->
-        <!--&lt;!&ndash;right&ndash;&gt;<img class="item-note" ng-src="{{pokemon.caughtImage}}" height="25" width="25">-->
-        <!--<p>{{pokemon.types[1].type.name}}</p>-->
-
+        
         <i class="icon ion-chevron-right icon-accessory"></i>
-
-        <!--<ion-option-button class="button-assertive" ng-click="remove(pokemon)">
-          Delete
-        </ion-option-button>-->
       </ion-item>
     </ion-list>
     <ion-infinite-scroll
