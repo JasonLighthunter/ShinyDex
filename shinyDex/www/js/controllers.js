@@ -32,23 +32,17 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {
-  console.log($stateParams.pokemonId);
+.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory /*$cordovaSocialSharing*/) {
   Pokemon.get($stateParams.pokemonId)
     .then(function(res) {
       $scope.pokemon = res;
+      $scope.doBrag  = function() {
+        ShareFactory.shareViaWhatsApp(res.name);
+      };
     });
-
-  $scope.doBrag = function() {
-    window.open('http://www.reddit.com/r/shinypokemon', '_system', 'location=yes');
-  };
 })
 
 .controller('SettingsCtrl', function($scope, $ionicPlatform, $cordovaCamera) {
-  $scope.settings = {
-    enableFriends: true
-  };
-
   $scope.cameraButtonLabel = 'take picture';
   $scope.imageSrc          = undefined;
 
