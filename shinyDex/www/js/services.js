@@ -119,6 +119,16 @@ angular.module('starter.services', [])
       });
   }
 
+  function getPokemon(pokemonId) {
+    return $http.get(baseUrl + '/' + pokemonId)
+      .then(function(response){
+        if(response.data) {
+          pokemon = response.data;
+        }
+        return pokemon;
+      });
+  }
+
   function getPokemonNumber(pokemonUrl){
     var urlString = angular.copy(pokemonUrl);
     if(urlString.lastIndexOf("/") == urlString.length-1) {
@@ -145,12 +155,7 @@ angular.module('starter.services', [])
         });
     },
     get: function(pokemonId) {
-     for (var i = 0; i < pokemonList.length; i++) {
-       if (pokemonList[i].id === parseInt(pokemonId)) {
-         return pokemonList[i];
-       }
-     }
-     return null;
+      return getPokemon(pokemonId);
    }
   };
 });
