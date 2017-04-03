@@ -132,9 +132,6 @@ angular.module('starter.services', [])
   }
 
   return {
-    getFeed: function() {
-      return getPokemonListFeed();
-    },
     getPokemonList: function(lastPokemonId){
       if(!lastPokemonId || lastPokemonId<1) lastPokemonId = 1;
       var myPromise = getPokemonList(lastPokemonId);

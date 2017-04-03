@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('PokemonCtrl', function($scope, Pokemon, $q) {
+.controller('PokemonCtrl', function($scope, Pokemon, $q, $location) {
 
   $scope.pokemonList = [];
   $scope.canLoadMore = true;
@@ -27,22 +27,9 @@ angular.module('starter.controllers', [])
     $scope.loadMore();
   });
 
-  // $q.when(Pokemon.getPokemonList().then(function(res) {
-  //   if (res) {
-  //     console.log(res);
-  //     $scope.pokemonList = $scope.pokemonList.concat(res);
-  //   }
-  // }));
-  //$scope.pokemonList = Pokemon.getFeed('http://pokeapi.co/api/v2/pokemon?offset=760');
-
-
-
-  // Pokemon.getFeed().then(
-  //   function(res) {
-  //     console.log(res);
-  //     $scope.pokemonList = res;
-  //   }
-  // );
+  $scope.goto = function(path) {
+    $location.url('/tab'+path);
+  };
 })
 
 .controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon) {
