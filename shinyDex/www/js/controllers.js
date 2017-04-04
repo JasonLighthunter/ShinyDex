@@ -32,12 +32,31 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory /*$cordovaSocialSharing*/) {
+.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory, CameraFactory, $cordovaCamera) {
   Pokemon.get($stateParams.pokemonId)
     .then(function(res) {
       $scope.pokemon = res;
-      $scope.doBrag  = function() {
-        ShareFactory.shareViaWhatsApp(res.name);
+      $scope.proofImageSrc = Pokemon.getProof($scope.pokemon.name);
+      
+      $scope.doBrag = function() {
+        $scope.testLabel = $scope.proofImageSrc.toString();
+        if($scope.proofImageSrc !== undefined) {
+          ShareFactory.shareViaWhatsApp(res.name);
+        }
+      };
+      
+      $scope.doRegister = function() {
+        var options = CameraFactory.options;
+
+        $cordovaCamera.getPicture(options).then(
+          function(imageData) {
+            $scope.proofImageSrc = 'data:image/jpeg;base64,' + imageData;
+            Pokemon.register($scope.pokemon.name, $scope.proofImageSrc);
+          },
+          function(err) {
+            console.log('Error Encountered');
+          }
+        );
       };
     });
 })
@@ -57,7 +76,7 @@ angular.module('starter.controllers', [])
     y : null,
     z : null,
     timestamp : null
-  }
+  };
 
   // Previous measurements
   $scope.previousMeasurements = {
@@ -65,7 +84,7 @@ angular.module('starter.controllers', [])
     y : null,
     z : null,
     timestamp : null
-  }
+  };
 
   // Watcher object
   $scope.watch = null;
@@ -100,7 +119,7 @@ angular.module('starter.controllers', [])
     // Stop watching method
     $scope.stopWatching = function() {
       $scope.watch.clearWatch();
-    }
+    };
 
     // Detect shake method
     $scope.detectShake = function(result) {
@@ -129,7 +148,7 @@ angular.module('starter.controllers', [])
           x: null,
           y: null,
           z: null
-        }
+        };
 
       } else {
         // On first measurements set it as the previous one
@@ -137,17 +156,17 @@ angular.module('starter.controllers', [])
           x: result.x,
           y: result.y,
           z: result.z
-        }
+        };
       }
 
-    }
+    };
 
   });
 
   $scope.$on('$ionicView.afterEnter', function(){
     $scope.testLabel = 0;
     $scope.startWatching();
-  })
+  });
 
   $scope.$on('$ionicView.beforeLeave', function(){
     $scope.watch.clearWatch(); // Turn off motion detection watcher
@@ -155,21 +174,5 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
-
-  $scope.cameraButtonLabel = 'take picture';
-  $scope.imageSrc = undefined;
-
-  $scope.takePicture = function() {
-    var options = CameraFactory.options;
-
-    $cordovaCamera.getPicture(options).then(
-      function(imageData) {
-        $scope.imageSrc = 'data:image/jpeg;base64,' + imageData;
-      },
-      function(err) {
-        console.log('Error Encountered');
-      }
-    );
-  };
 });
 

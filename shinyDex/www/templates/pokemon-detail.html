@@ -8,15 +8,16 @@
   <ion-content>
     <div class="row">
       <div class="col col-50 align-children-center">
-        <div ng-switch="pokemon.sprites.front_default == null">
+
+        <div ng-switch="proofImageSrc == null">
           <div ng-switch-when="true">
-            <img class="max-width-eq-parent pokemon-image" src="http://cdn.bulbagarden.net/upload/9/98/Missingno_RB.png"/>
-          </div>
-          <div ng-switch-default>
             <img class="max-width-eq-parent pokemon-image" src="{{pokemon.sprites.front_default}}"/>
           </div>
+          <div ng-switch-default>
+            <img class="max-width-eq-parent pokemon-image" src="{{proofImageSrc}}"/>
+          </div>
         </div>
-        <!-- <img class="max-width-eq-parent pokemon-image" src="{{pokemon.sprites.front_default}}"/> -->
+
       </div>
       <div class="col col-50">
         <div class="item">{{pokemon.name}}</div>
@@ -27,7 +28,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <button class="button button-dark button-block">
+        <button ng-click="doRegister()" class="button button-dark button-block">
           Register
           &nbsp   
           <i class="icon ion-camera"></i>
@@ -48,6 +49,7 @@
           {{ability.ability.name}}
           <span ng-if="ability.is_hidden" class="item-note">hidden ability</span>
         </ion-item>
+        <ion-item class="item ng-hide">{{testLabel}}</ion-item>
       </ion-list>
     </div>
   </ion-content>
