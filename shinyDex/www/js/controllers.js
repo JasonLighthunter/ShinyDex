@@ -32,19 +32,19 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory, CameraFactory, $cordovaCamera) {
+.controller('PokemonDetailCtrl', function($scope, $stateParams, $ionicPlatform, Pokemon, ShareFactory, ShakeFactory, CameraFactory, $cordovaCamera, $cordovaDeviceMotion) {
   Pokemon.get($stateParams.pokemonId)
     .then(function(res) {
       $scope.pokemon = res;
       $scope.proofImageSrc = Pokemon.getProof($scope.pokemon.name);
-      
+
       $scope.doBrag = function() {
         $scope.testLabel = $scope.proofImageSrc.toString();
         if($scope.proofImageSrc !== undefined) {
           ShareFactory.shareViaWhatsApp(res.name);
         }
       };
-      
+
       $scope.doRegister = function() {
         var options = CameraFactory.options;
 
@@ -58,115 +58,91 @@ angular.module('starter.controllers', [])
           }
         );
       };
-    });
-})
 
-.controller('testCtrl', function($scope, $ionicPlatform, $cordovaDeviceMotion){
-  $scope.testLabel = 0;
+      $scope.options = ShakeFactory.options;
 
-  // watch Acceleration options
-  $scope.options = {
-    frequency: 100, // Measure every 100ms
-    deviation : 25  // We'll use deviation to determine the shake event, best values in the range between 25 and 30
-  };
+      // Current measurements
 
-  // Current measurements
-  $scope.measurements = {
-    x : null,
-    y : null,
-    z : null,
-    timestamp : null
-  };
+      measurements = ShakeFactory.measurements();
 
-  // Previous measurements
-  $scope.previousMeasurements = {
-    x : null,
-    y : null,
-    z : null,
-    timestamp : null
-  };
+      // Previous measurements
+      previousMeasurements = ShakeFactory.measurements();
 
-  // Watcher object
-  $scope.watch = null;
+      // Watcher object
+      $scope.watch = null;
 
-  // Start measurements when Cordova device is ready
-  $ionicPlatform.ready(function() {
+      // Start measurements when Cordova device is ready
+      $ionicPlatform.ready(function() {
 
-    //Start Watching method
-    $scope.startWatching = function() {
+        //Start Watching method
+        $scope.startWatching = function() {
 
-        // Device motion configuration
-        $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
+          // Device motion configuration
+          $scope.watch = $cordovaDeviceMotion.watchAcceleration($scope.options);
 
-        // Device motion initilaization
-        $scope.watch.then(null, function(error) {
-          console.log('Error');
-        console.log(error);
-      },function(result) {
+          // Device motion initilaization
+          $scope.watch.then(null, function(error) {
+            console.log('Error');
+            console.log(error);
+          },function(result) {
 
-        // Set current data
-        $scope.measurements.x = result.x;
-        $scope.measurements.y = result.y;
-        $scope.measurements.z = result.z;
-        $scope.measurements.timestamp = result.timestamp;
+            // Set current data
+            measurements.x = result.x;
+            measurements.y = result.y;
+            measurements.z = result.z;
+            measurements.timestamp = result.timestamp;
 
-        // Detecta shake
-        $scope.detectShake(result);
+            // Detecta shake
+            $scope.detectShake(result);
 
+          });
+        };
+
+        // Stop watching method
+        $scope.stopWatching = function() {
+          $scope.watch.clearWatch();
+        };
+
+        // Detect shake method
+        $scope.detectShake = function(result) {
+
+          //Object to hold measurement difference between current and old data
+          var measurementsChange = {};
+
+          // Calculate measurement change only if we have two sets of data, current and old
+          if (previousMeasurements.x !== null) {
+            measurementsChange.x = Math.abs(previousMeasurements.x, result.x);
+            measurementsChange.y = Math.abs(previousMeasurements.y, result.y);
+            measurementsChange.z = Math.abs(previousMeasurements.z, result.z);
+          }
+
+          // If measurement change is bigger then predefined deviation
+          if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation) {
+            $scope.stopWatching();  // Stop watching because it will start triggering like hell
+            $scope.doRegister();
+
+
+            console.log('Shake detected'); // shake detected
+            setTimeout($scope.startWatching(), 10000);  // Again start watching after 1 sec
+
+            // Clean previous measurements after succesfull shake detection, so we can do it next time
+            previousMeasurements = ShakeFactory.measurements();
+
+          } else {
+            // On first measurements set it as the previous one
+            previousMeasurements = {
+              x: result.x,
+              y: result.y,
+              z: result.z
+            };
+          }
+        };
       });
-    };
 
-    // Stop watching method
-    $scope.stopWatching = function() {
-      $scope.watch.clearWatch();
-    };
+      $scope.startWatching();
 
-    // Detect shake method
-    $scope.detectShake = function(result) {
+    });
 
-      //Object to hold measurement difference between current and old data
-      var measurementsChange = {};
-
-      // Calculate measurement change only if we have two sets of data, current and old
-      if ($scope.previousMeasurements.x !== null) {
-        measurementsChange.x = Math.abs($scope.previousMeasurements.x, result.x);
-        measurementsChange.y = Math.abs($scope.previousMeasurements.y, result.y);
-        measurementsChange.z = Math.abs($scope.previousMeasurements.z, result.z);
-      }
-
-      // If measurement change is bigger then predefined deviation
-      if (measurementsChange.x + measurementsChange.y + measurementsChange.z > $scope.options.deviation) {
-        $scope.stopWatching();  // Stop watching because it will start triggering like hell
-
-        $scope.testLabel += 1;
-
-        console.log('Shake detected'); // shake detected
-        setTimeout($scope.startWatching(), 1000);  // Again start watching after 1 sec
-
-        // Clean previous measurements after succesfull shake detection, so we can do it next time
-        $scope.previousMeasurements = {
-          x: null,
-          y: null,
-          z: null
-        };
-
-      } else {
-        // On first measurements set it as the previous one
-        $scope.previousMeasurements = {
-          x: result.x,
-          y: result.y,
-          z: result.z
-        };
-      }
-
-    };
-
-  });
-
-  $scope.$on('$ionicView.afterEnter', function(){
-    $scope.testLabel = 0;
-    $scope.startWatching();
-  });
 
   $scope.$on('$ionicView.beforeLeave', function(){
     $scope.watch.clearWatch(); // Turn off motion detection watcher
