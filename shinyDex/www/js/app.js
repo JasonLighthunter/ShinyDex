@@ -68,16 +68,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     }
   })
 
-  .state('tab.test', {
-    url: '/test',
-    views: {
-      'tab-test': {
-        templateUrl: 'templates/tab-test.html',
-        controller: 'testCtrl'
-      }
-    }
-  })
-
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/pokemon');
 });
