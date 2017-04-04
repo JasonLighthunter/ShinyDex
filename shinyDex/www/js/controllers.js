@@ -32,12 +32,31 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory /*$cordovaSocialSharing*/) {
+.controller('PokemonDetailCtrl', function($scope, $stateParams, Pokemon, ShareFactory, CameraFactory, $cordovaCamera) {
   Pokemon.get($stateParams.pokemonId)
     .then(function(res) {
       $scope.pokemon = res;
-      $scope.doBrag  = function() {
-        ShareFactory.shareViaWhatsApp(res.name);
+      $scope.proofImageSrc = Pokemon.getProof($scope.pokemon.name);
+      
+      $scope.doBrag = function() {
+        $scope.testLabel = $scope.proofImageSrc.toString();
+        if($scope.proofImageSrc !== undefined) {
+          ShareFactory.shareViaWhatsApp(res.name);
+        }
+      };
+      
+      $scope.doRegister = function() {
+        var options = CameraFactory.options;
+
+        $cordovaCamera.getPicture(options).then(
+          function(imageData) {
+            $scope.proofImageSrc = 'data:image/jpeg;base64,' + imageData;
+            Pokemon.register($scope.pokemon.name, $scope.proofImageSrc);
+          },
+          function(err) {
+            console.log('Error Encountered');
+          }
+        );
       };
     });
 })
@@ -49,6 +68,7 @@ angular.module('starter.controllers', [])
   $scope.options = ShakeFactory.options;
 
   // Current measurements
+
   measurements = ShakeFactory.measurements();
 
   // Previous measurements
@@ -138,21 +158,5 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
-
-  $scope.cameraButtonLabel = 'take picture';
-  $scope.imageSrc = undefined;
-
-  $scope.takePicture = function() {
-    var options = CameraFactory.options;
-
-    $cordovaCamera.getPicture(options).then(
-      function(imageData) {
-        $scope.imageSrc = 'data:image/jpeg;base64,' + imageData;
-      },
-      function(err) {
-        console.log('Error Encountered');
-      }
-    );
-  };
 });
 

@@ -130,6 +130,10 @@ angular.module('starter.services', [])
     return(urlString);
   }
 
+  function registerPokemon(pokemonId, imageSrc) {
+    window.localStorage.setItem('proof/' + pokemonId, imageSrc);
+  }
+
   return {
     getPokemonList: function(lastPokemonId){
       if(!lastPokemonId || lastPokemonId<1) lastPokemonId = 1;
@@ -141,7 +145,17 @@ angular.module('starter.services', [])
     },
     get: function(pokemonId) {
       return getPokemon(pokemonId);
-   }
+    },
+    register: function(pokemonId, imageSrc) {
+      registerPokemon(pokemonId, imageSrc);
+    },
+    getProof: function(pokemonId) {
+      var proof = window.localStorage.getItem('proof/' + pokemonId);
+      if(proof === undefined) {
+        return null;
+      }
+      return proof;
+    }
   };
 })
 
@@ -150,7 +164,7 @@ angular.module('starter.services', [])
       quality            : 50,
       destinationType    : Camera.DestinationType.DATA_URL,
       sourceType         : Camera.PictureSourceType.CAMERA,
-      allowEdit          : false,
+      allowEdit          : true,
       encodingType       : Camera.EncodingType.JPEG,
       targetWidth        : 300,
       targetHeight       : 300,
@@ -167,8 +181,7 @@ angular.module('starter.services', [])
 .factory('ShareFactory', function($cordovaSocialSharing) {
   return {
     shareViaWhatsApp: function(pokemonName) {
-      var message = "I caught a " + pokemonName;
-      console.log("test");
+      var message = "I caught a shiny " + pokemonName;
 
       $cordovaSocialSharing
       .shareViaWhatsApp(message)
