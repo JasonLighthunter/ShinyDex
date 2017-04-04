@@ -38,8 +38,11 @@ angular.module('starter.controllers', [])
       $scope.pokemon = res;
       $scope.proofImageSrc = Pokemon.getProof($scope.pokemon.name);
       
-      $scope.doBrag  = function() {
-        ShareFactory.shareViaWhatsApp(res.name);
+      $scope.doBrag = function() {
+        $scope.testLabel = $scope.proofImageSrc.toString();
+        if($scope.proofImageSrc !== undefined) {
+          ShareFactory.shareViaWhatsApp(res.name);
+        }
       };
       
       $scope.doRegister = function() {

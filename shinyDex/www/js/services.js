@@ -181,8 +181,7 @@ angular.module('starter.services', [])
 .factory('ShareFactory', function($cordovaSocialSharing) {
   return {
     shareViaWhatsApp: function(pokemonName) {
-      var message = "I caught a " + pokemonName;
-      console.log("test");
+      var message = "I caught a shiny " + pokemonName;
 
       $cordovaSocialSharing
       .shareViaWhatsApp(message)
