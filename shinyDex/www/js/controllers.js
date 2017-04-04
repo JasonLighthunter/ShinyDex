@@ -171,8 +171,5 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
-  $scope.removeProof = function() {
-    localStorage
-  };
 });
 
