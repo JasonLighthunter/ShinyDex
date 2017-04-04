@@ -149,6 +149,9 @@ angular.module('starter.controllers', [])
   });
 })
 
-.controller('SettingsCtrl', function($scope, CameraFactory, $cordovaCamera) {
+.controller('SettingsCtrl', function($scope) {
+  $scope.clearCache = function() {
+    window.localStorage.clear();
+  };
 });
 

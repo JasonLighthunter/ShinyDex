@@ -1,14 +1,10 @@
 angular.module('starter.services', [])
 
-.factory('Pokemon', function($http, $q, $window) {
+.factory('Pokemon', function($http, $q) {
   // Might use a resource here that returns a JSON array
-
-  $window.localStorage;
-
   var baseUrl = 'http://pokeapi.co/api/v2/pokemon';
   var pokemonList = [];
   var pokemon = {};
-
 
   function getPokemonListFromLocalStorage(currentNr){
     var idList = JSON.parse(window.localStorage.getItem('pokemonList/metadata')).idList;
@@ -74,12 +70,12 @@ angular.module('starter.services', [])
   verder werkt deze query recursief waardoor in een keer de gehele lijst wordt ingeladen.
    */
   function getPokemonListFeed(){
-        return getPokemonListFeedRecursive(baseUrl + '?offset=760').then(function () {
+        return getPokemonListFeedRecursive(baseUrl).then(function () {
           var idList = [];
 
           for (var i = 0; i < pokemonList.length; i++) {
             pokemonList[i].nr = getPokemonNumber(pokemonList[i].url);
-            $window.localStorage.setItem('pokemonList/'+pokemonList[i].nr, JSON.stringify({
+            window.localStorage.setItem('pokemonList/'+pokemonList[i].nr, JSON.stringify({
               name: pokemonList[i].name,
               url: pokemonList[i].url,
               nr: pokemonList[i].nr
@@ -87,7 +83,7 @@ angular.module('starter.services', [])
             idList = idList.concat(angular.copy(pokemonList[i].nr));
           }
 
-          $window.localStorage.setItem('pokemonList/metadata', JSON.stringify(
+          window.localStorage.setItem('pokemonList/metadata', JSON.stringify(
             {
             lastAcces: Date.now(),
             filled: true,
