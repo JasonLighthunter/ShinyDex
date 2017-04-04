@@ -187,9 +187,18 @@ angular.module('starter.services', [])
     deviation : 25  // We'll use deviation to determine the shake event, best values in the range between 25 and 30
   };
 
-  return {
-    options : opts
+  var measurements = {
+    x : null,
+    y : null,
+    z : null,
+    timestamp : null
+  };
 
+  return {
+    options : opts,
+    measurements : function(){
+      return angular.copy(measurements);
+    }
   };
 })
 ;
